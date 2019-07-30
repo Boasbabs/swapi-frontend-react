@@ -1,49 +1,32 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Header, Container } from "semantic-ui-react";
-import logo from "./assets/star_wars_logo.png";
+import axios from "axios";
+
 import { CharacterPlaceholder, MovieDropdown } from "components";
+import { FETCH_FILMS_API } from "../../constants"
+import logo from "./assets/star_wars_logo.png";
 import "./assets/App.css";
 
-const friendOptions = [
-  {
-    key: "Jenny Hess",
-    text: "Jenny Hess",
-    value: "Jenny Hess",
-    image: { avatar: true, src: "https://via.placeholder.com/150" }
-  },
-  {
-    key: "Elliot Fu",
-    text: "Elliot Fu",
-    value: "Elliot Fu",
-    image: { avatar: true, src: "https://via.placeholder.com/150" }
-  },
-  {
-    key: "Stevie Feliciano",
-    text: "Stevie Feliciano",
-    value: "Stevie Feliciano",
-    image: { avatar: true, src: "https://via.placeholder.com/150" }
-  },
-  {
-    key: "Christian",
-    text: "Christian",
-    value: "Christian",
-    image: { avatar: true, src: "https://via.placeholder.com/150" }
-  },
-  {
-    key: "Matt",
-    text: "Matt",
-    value: "Matt",
-    image: { avatar: true, src: "https://via.placeholder.com/150" }
-  },
-  {
-    key: "Justen Kitsune",
-    text: "Justen Kitsune",
-    value: "Justen Kitsune",
-    image: { avatar: true, src: "https://via.placeholder.com/150" }
-  }
-];
-
 function App() {
+  const [data, setData] = useState({ results: [] });
+
+  // API Request
+  useEffect(() => {
+    async function fetchData() {
+      const result = await axios(FETCH_FILMS_API);
+      setData(result.data);
+    }
+    fetchData();
+  }, []);
+
+  // The fields of the dropdown needs to be built from the API
+  const filmOptions = data.results.map(item => ({
+    key: item.episode_id,
+    text: item.title,
+    value: item.title,
+    image: { avatar: true, src: "https://via.placeholder.com/150" }
+  }));
+
   return (
     <div className="App">
       <Container>
@@ -52,9 +35,10 @@ function App() {
           <Header size="large" color="yellow">
             Star Wars movies details below
           </Header>
-          <MovieDropdown movieData={friendOptions} />
+          <MovieDropdown movieData={filmOptions} />
           <CharacterPlaceholder />
         </header>
+        
       </Container>
     </div>
   );
