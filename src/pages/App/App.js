@@ -1,7 +1,7 @@
 import React from "react";
 import { Menu, Icon, Container, Header, Input } from "semantic-ui-react";
-import logo from "./star_wars_logo.png";
-import { CharacterPlaceholder } from "./components";
+import logo from "./assets/star_wars_logo.png";
+import { CharacterPlaceholder } from "components";
 import "./App.css";
 
 function App() {
