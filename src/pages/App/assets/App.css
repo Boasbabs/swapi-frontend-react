@@ -5,11 +5,7 @@
   min-height: 100vh;
   flex-direction: column;
   align-items: center;
-}
-
-.App-logo {
-  height: 25vmin;
-  pointer-events: none;
+  margin: 0;
 }
 
 .App-header {
@@ -17,4 +13,5 @@
   flex-direction: column;
   align-items: center;
   color: white;
+  margin-bottom: 0 !important;
 }

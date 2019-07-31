@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Header, Container, Icon } from "semantic-ui-react";
+import { Container, Segment, Image } from "semantic-ui-react";
 import axios from "axios";
 
-import { CharacterPlaceholder, MovieDropdown } from "components";
+import { CharacterPlaceholder, MovieDropdown, PageHeader } from "components";
+import { sortDateOldToNew } from "utils";
 import { FETCH_FILMS_API } from "../../constants";
 import logo from "./assets/star_wars_logo.png";
 import "./assets/App.css";
 
 function App() {
   const [data, setData] = useState({ results: [] });
+  const [value, setValue] = useState(null);
 
   // API Request
   useEffect(() => {
@@ -23,36 +25,36 @@ function App() {
   const filmOptions = data.results.map(item => ({
     key: item.episode_id,
     text: item.title,
-    value: item.title,
-    date: item.release_date,
-    image: { avatar: true, src: "https://via.placeholder.com/150" }
+    value: item.episode_id,
+    date: item.release_date
   }));
 
   // Movie names in the dropdown sorted by release date from earliest to newest
-  filmOptions.sort(function(a, b) {
-    let dateA = new Date(a.date),
-      dateB = new Date(b.date);
-    return dateA - dateB;
-  });
+  filmOptions.sort(sortDateOldToNew);
+
+  function handleChange(e, { value }) {
+    return setValue(value);
+  }
 
   return (
-    <div className="App">
-      <Container>
-        <header className="App-header">
-          <Header />
-          <Header icon size="large" color="yellow" style={{fontWeight: "400", fontSize: "40px"}}>
-            <Icon name="react" />
-            Star Wars movies details below
-            <Header.Subheader style={{color: "#fff"}}>
-              Displaying data from <code>https://swapi.co</code>.
-            </Header.Subheader>
-          </Header>
-          <MovieDropdown movieData={filmOptions} />
-          {/* <CharacterPlaceholder /> */}
-        </header>
-        <img src={logo} className="App-logo" alt="logo" />
-      </Container>
-    </div>
+    <Container className="App" fluid>
+      <Segment className="App-header" padded basic>
+        <PageHeader
+          title={"Fetching Star Wars API"}
+          subtitle={"Displaying data from https://swapi.co."}
+          icon={"react"}
+        />
+        <MovieDropdown
+          movieData={filmOptions}
+          handleChange={handleChange}
+          value={value}
+        />
+
+        {/* <CharacterPlaceholder /> */}
+        <pre>Current value: {value}</pre>
+      </Segment>
+      <Image src={logo} size="small" centered />
+    </Container>
   );
 }
 
