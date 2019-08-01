@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import { Message } from "semantic-ui-react";
 
 const MarqueeMessage = ({ text }) => (
@@ -8,5 +9,9 @@ const MarqueeMessage = ({ text }) => (
     </marquee>
   </Message>
 );
+
+MarqueeMessage.propTypes = {
+    text: PropTypes.string.isRequired
+}
 
 export default MarqueeMessage;

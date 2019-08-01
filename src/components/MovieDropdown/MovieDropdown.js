@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import { Dropdown } from 'semantic-ui-react'
 
 
@@ -12,5 +13,11 @@ const MovieDropdown = ({movieData, value, handleChange}) => (
     onChange={handleChange}
   />
 )
+
+MovieDropdown.propTypes = {
+  movieData: PropTypes.array,
+  value: PropTypes.string,
+  handleChange: PropTypes.func,
+}
 
 export default MovieDropdown

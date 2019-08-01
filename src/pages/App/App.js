@@ -45,7 +45,8 @@ function App() {
     text: item.title,
     value: item.episode_id,
     date: item.release_date,
-    opening_crawl: item.opening_crawl
+    opening_crawl: item.opening_crawl,
+    characters: item.characters
   }));
 
   // Movie names in the dropdown sorted by release date from earliest to newest
@@ -53,6 +54,7 @@ function App() {
 
   function handleChange(e, { value }) {
     const currentFilm = filmOptions.find(film => film.value === value);
+    console.log("list", currentFilm.characters)
     return [setValue(value), setOpeningCrawl(currentFilm.opening_crawl)];
   }
 

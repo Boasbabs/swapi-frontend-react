@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import PropTypes from 'prop-types';
 import { Header, Icon } from "semantic-ui-react";
 
 const PageHeader = ({title, icon, subtitle}) => (
@@ -17,5 +18,11 @@ const PageHeader = ({title, icon, subtitle}) => (
     </Header>
   </Fragment>
 );
+
+PageHeader.propTypes = {
+    title: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired,
+    subtitle: PropTypes.string.isRequired,
+}
 
 export default PageHeader;
