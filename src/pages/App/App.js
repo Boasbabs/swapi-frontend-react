@@ -1,20 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Segment,
-  Image,
-  Header,
-  Loader,
-  Dimmer
-} from "semantic-ui-react";
+import { Container, Segment, Image, Message, Loader } from "semantic-ui-react";
 import axios from "axios";
 
-import {
-  CharacterPlaceholder,
-  MovieDropdown,
-  PageHeader,
-  MarqueeMessage
-} from "components";
+import { MovieDropdown, PageHeader, MarqueeMessage } from "components";
 
 import { sortDateOldToNew } from "utils";
 import { FETCH_FILMS_API } from "../../constants";
@@ -26,15 +14,24 @@ function App() {
   const [filmCharacters, setFilmCharacters] = useState([]);
   const [value, setValue] = useState(null);
   const [openingCrawl, setOpeningCrawl] = useState(null);
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // API Request for films
   useEffect(() => {
     async function fetchMovieData() {
-      const result = await axios(FETCH_FILMS_API);
-      setData(result.data);
+      setIsError(false);
+      setIsLoading(true);
+      try {
+        const result = await axios(FETCH_FILMS_API);
+        setData(result.data);
+        setIsLoading(false);
+      } catch (error) {
+        setIsError(true);
+      }
     }
     fetchMovieData();
-  }, []);
+  }, [filmCharacters]);
 
   // The fields of the dropdown needs to be built from the API
   const filmOptions = data.results.map(item => ({
@@ -57,24 +54,21 @@ function App() {
     });
     return list;
   }
-
   function handleChange(e, { value }) {
     // Needs to get current selected using the value of the selected options
     const currentFilm = filmOptions.find(film => film.value === value);
 
     // Needs to fetch API for each of characters
-    const currentFilmCharacters = currentFilm.characters;
+    const currentFilmCharactersUrl = currentFilm.characters;
 
-    const charactersList = buildCharacterList(currentFilmCharacters);
+    const charactersList = buildCharacterList(currentFilmCharactersUrl);
 
     return [
       setValue(value),
-      setOpeningCrawl(currentFilm.opening_crawl),
-      setFilmCharacters(charactersList)
+      setFilmCharacters(charactersList),
+      setOpeningCrawl(currentFilm.opening_crawl)
     ];
   }
-  console.log("filmChars", filmCharacters);
-  console.log("data", data);
 
   return (
     <Container className="App" fluid>
@@ -85,8 +79,18 @@ function App() {
           icon={"react"}
         />
 
-        {filmOptions.length === 0 ? (
-        
+        {isError && (
+          <Message
+            style={{ width: "60%" }}
+            compact
+            negative
+            icon="ban"
+            header="We're sorry something"
+            content="It is not your fault. Don't be hard on yourself"
+          />
+        )}
+
+        {isLoading ? (
           <Loader
             active
             size="big"
@@ -101,44 +105,23 @@ function App() {
           />
         )}
 
-        {/* <CharacterPlaceholder /> */}
         <pre>Current value: {value}</pre>
 
         {openingCrawl && <MarqueeMessage text={openingCrawl} />}
       </Segment>
-      {/* 
-      
-      {categoryData.length === 0 ? (
-                  // Display spinner while data is fetch
-                  <Menu.Item className="loading-container">
-                    <Spin size="large" tip="Loading..." />
-                  </Menu.Item>
-                ) : (
-                  categoryData.map(({ name, id }) => (
-                    <SubMenu key={id} title={<span>{name}</span>}>
-                      <Menu.Item key={`${id}1`}>Option 1</Menu.Item>
-                      <Menu.Item key={`${id}2`}>Option 2</Menu.Item>
-                    </SubMenu>
-                  ))
-                )}
-      */}
+
       {value === null ? (
         <Image src={logo} size="small" centered />
-      ) : filmCharacters.length == 0 ? (
-        "loading"
+      ) : filmCharacters.length === 0 ? (
+        <Loader
+          active
+          size="massive"
+          inline="centered"
+          content="Loading movie characters..."
+        />
       ) : (
-        <p>this is tested</p>
+        filmCharacters.map(item => <p key={item.name}>{item.name}</p>)
       )}
-
-      {/* { !value ? (
-        <Image src={logo} size="small" centered />
-        ) : (
-          filmCharacters.map(item => (
-            <Header  color="green" key={item.episode_id}>{console.log(item.mass)}</Header>
-           
-          ))
-
-      )} */}
     </Container>
   );
 }
