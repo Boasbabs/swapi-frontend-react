@@ -16,7 +16,7 @@ const MovieDropdown = ({movieData, value, handleChange}) => (
 
 MovieDropdown.propTypes = {
   movieData: PropTypes.array,
-  value: PropTypes.string,
+  value: PropTypes.number,
   handleChange: PropTypes.func,
 }
 
