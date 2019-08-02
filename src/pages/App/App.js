@@ -81,7 +81,6 @@ function App() {
       setOpeningCrawl(currentFilm.opening_crawl)
     ];
   }
-  console.log("FILMDATA", filmCharacters);
 
   return (
     <Container className="App" fluid>
@@ -115,7 +114,7 @@ function App() {
 
       <Grid centered container>
         <Grid.Row>
-          <Grid.Column width={10}>
+          <Grid.Column width={12}>
             { value === null ? (
               <Image src={logo} size="small" centered />
             ) : filmCharacters.length === 0 ? (

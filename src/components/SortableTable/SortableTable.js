@@ -1,11 +1,19 @@
+import React, { useState, useEffect } from "react";
 import { sortBy, map } from "lodash";
-import React, { useState } from "react";
-import { Table } from "semantic-ui-react";
+import { Table, Icon } from "semantic-ui-react";
 
-function SortableTable({tableData}) {
+function convertToNumber(x) {
+  if (isNaN(x)) {
+    return 0;
+  }
+  return Number(x);
+}
+
+function SortableTable({ tableData }) {
   const [column, setColumn] = useState(null);
   const [data, setData] = useState(tableData);
   const [direction, setDirection] = useState(null);
+  const [heightInCm, setHeightInCm] = useState(0)
 
   const handleSort = clickedColumn => () => {
     if (column !== clickedColumn) {
@@ -19,7 +27,19 @@ function SortableTable({tableData}) {
     setDirection(direction === "ascending" ? "descending" : "ascending");
   };
 
-  console.log("DATA", data);
+  useEffect(() => {
+    async function handleTotalHeight() {
+      const hInCm = map(data, ({ height }) => convertToNumber(height)).reduce(
+        (sum, cur) => {
+          return sum + cur;
+        }
+      )
+      setHeightInCm(hInCm)
+    }
+    handleTotalHeight();
+  }, []);
+
+
   return (
     <Table sortable celled fixed compact unstackable>
       <Table.Header>
@@ -27,6 +47,7 @@ function SortableTable({tableData}) {
           <Table.HeaderCell
             sorted={column === "name" ? direction : null}
             onClick={handleSort("name")}
+            width={8}
           >
             Name
           </Table.HeaderCell>
@@ -48,11 +69,28 @@ function SortableTable({tableData}) {
         {map(data, ({ height, gender, name }) => (
           <Table.Row key={name}>
             <Table.Cell>{name}</Table.Cell>
-            <Table.Cell>{gender}</Table.Cell>
+            <Table.Cell>
+              {gender === "male" ? (
+                <Icon color="blue" name="mars" />
+              ) : gender === "female" ? (
+                <Icon color="pink" name="venus" />
+              ) : (
+                gender
+              )}
+            </Table.Cell>
             <Table.Cell>{height}</Table.Cell>
           </Table.Row>
         ))}
       </Table.Body>
+      <Table.Footer>
+        <Table.Row>
+          <Table.HeaderCell>3 People</Table.HeaderCell>
+          <Table.HeaderCell>2 Approved</Table.HeaderCell>
+          <Table.HeaderCell>
+            {heightInCm}
+          </Table.HeaderCell>
+        </Table.Row>
+      </Table.Footer>
     </Table>
   );
 }
