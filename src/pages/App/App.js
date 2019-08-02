@@ -104,7 +104,7 @@ function App() {
         )}
 
         <MovieDropdown
-          disabled={isLoading}
+          loading={isLoading}
           movieData={filmOptions}
           handleChange={handleChange}
           value={value}
