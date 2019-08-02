@@ -9,11 +9,28 @@ function convertToNumber(x) {
   return Number(x);
 }
 
+function convertCmToInches(x) {
+  if (isNaN(x)) {
+    return "Not a Number!";
+  }
+  return Number.parseFloat(x / 2.54).toFixed(2);
+}
+
+function convertCmToFeet(x) {
+  if (isNaN(x)) {
+    return "Not a Number!";
+  }
+  return Math.floor(x / 30.48);
+}
+
 function SortableTable({ tableData }) {
   const [column, setColumn] = useState(null);
   const [data, setData] = useState(tableData);
+  const [characterLength, setCharacterLength] = useState(0);
   const [direction, setDirection] = useState(null);
-  const [heightInCm, setHeightInCm] = useState(0)
+  const [heightInCm, setHeightInCm] = useState(0);
+  const [heightInInches, setHeightInInches] = useState(0);
+  const [heightInFeet, setHeightInFeet] = useState(0);
 
   const handleSort = clickedColumn => () => {
     if (column !== clickedColumn) {
@@ -33,15 +50,18 @@ function SortableTable({ tableData }) {
         (sum, cur) => {
           return sum + cur;
         }
-      )
-      setHeightInCm(hInCm)
+      );
+      setHeightInCm(hInCm);
+      setCharacterLength(data.length)
+      setHeightInFeet(convertCmToFeet(hInCm));
+      setHeightInInches(convertCmToInches(hInCm));
     }
     handleTotalHeight();
   }, []);
 
 
   return (
-    <Table sortable celled fixed compact unstackable>
+    <Table sortable celled fixed compact unstackable color="yellow">
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell
@@ -84,10 +104,12 @@ function SortableTable({ tableData }) {
       </Table.Body>
       <Table.Footer>
         <Table.Row>
-          <Table.HeaderCell>3 People</Table.HeaderCell>
-          <Table.HeaderCell>2 Approved</Table.HeaderCell>
+          <Table.HeaderCell>Total Characters: {characterLength}</Table.HeaderCell>
+          <Table.HeaderCell>&nbsp;</Table.HeaderCell>
           <Table.HeaderCell>
-            {heightInCm}
+            <strong>
+              {`${heightInCm} cm (${heightInFeet}ft / ${heightInInches}in)`}{" "}
+            </strong>
           </Table.HeaderCell>
         </Table.Row>
       </Table.Footer>
