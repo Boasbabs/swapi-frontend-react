@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Container, Segment, Image, Message, Loader } from "semantic-ui-react";
+import {
+  Container,
+  Segment,
+  Image,
+  Message,
+  Loader,
+  Grid
+} from "semantic-ui-react";
 import axios from "axios";
 
-import { MovieDropdown, PageHeader, MarqueeMessage } from "components";
+import {
+  MovieDropdown,
+  PageHeader,
+  MarqueeMessage,
+  SortableTable
+} from "components";
 
 import { sortDateOldToNew } from "utils";
 import { FETCH_FILMS_API } from "../../constants";
@@ -69,6 +81,7 @@ function App() {
       setOpeningCrawl(currentFilm.opening_crawl)
     ];
   }
+  console.log("FILMDATA", filmCharacters);
 
   return (
     <Container className="App" fluid>
@@ -90,38 +103,34 @@ function App() {
           />
         )}
 
-        {isLoading ? (
-          <Loader
-            active
-            size="big"
-            inline="centered"
-            content="Loading data..."
-          />
-        ) : (
-          <MovieDropdown
-            movieData={filmOptions}
-            handleChange={handleChange}
-            value={value}
-          />
-        )}
-
-        <pre>Current value: {value}</pre>
+        <MovieDropdown
+          disabled={isLoading}
+          movieData={filmOptions}
+          handleChange={handleChange}
+          value={value}
+        />
 
         {openingCrawl && <MarqueeMessage text={openingCrawl} />}
       </Segment>
 
-      {value === null ? (
-        <Image src={logo} size="small" centered />
-      ) : filmCharacters.length === 0 ? (
-        <Loader
-          active
-          size="massive"
-          inline="centered"
-          content="Loading movie characters..."
-        />
-      ) : (
-        filmCharacters.map(item => <p key={item.name}>{item.name}</p>)
-      )}
+      <Grid centered container>
+        <Grid.Row>
+          <Grid.Column width={10}>
+            { value === null ? (
+              <Image src={logo} size="small" centered />
+            ) : filmCharacters.length === 0 ? (
+              <Loader
+                active
+                size="massive"
+                inline="centered"
+                content="Loading movie characters..."
+              />
+            ) : (
+              <SortableTable tableData={filmCharacters} />
+            )}
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     </Container>
   );
 }
