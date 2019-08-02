@@ -1,27 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { sortBy, map } from "lodash";
 import { Table, Icon } from "semantic-ui-react";
-
-function convertToNumber(x) {
-  if (isNaN(x)) {
-    return 0;
-  }
-  return Number(x);
-}
-
-function convertCmToInches(x) {
-  if (isNaN(x)) {
-    return "Not a Number!";
-  }
-  return Number.parseFloat(x / 2.54).toFixed(2);
-}
-
-function convertCmToFeet(x) {
-  if (isNaN(x)) {
-    return "Not a Number!";
-  }
-  return Math.floor(x / 30.48);
-}
+import { convertCmToFeet, convertToNumber, convertCmToInches } from "utils";
 
 function SortableTable({ tableData }) {
   const [column, setColumn] = useState(null);
@@ -52,13 +32,12 @@ function SortableTable({ tableData }) {
         }
       );
       setHeightInCm(hInCm);
-      setCharacterLength(data.length)
+      setCharacterLength(data.length);
       setHeightInFeet(convertCmToFeet(hInCm));
       setHeightInInches(convertCmToInches(hInCm));
     }
     handleTotalHeight();
   }, []);
-
 
   return (
     <Table sortable celled fixed compact unstackable color="yellow">
@@ -104,7 +83,9 @@ function SortableTable({ tableData }) {
       </Table.Body>
       <Table.Footer>
         <Table.Row>
-          <Table.HeaderCell>Total Characters: {characterLength}</Table.HeaderCell>
+          <Table.HeaderCell>
+            Total Characters: {characterLength}
+          </Table.HeaderCell>
           <Table.HeaderCell>&nbsp;</Table.HeaderCell>
           <Table.HeaderCell>
             <strong>
