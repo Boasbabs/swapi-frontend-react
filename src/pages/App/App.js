@@ -37,6 +37,7 @@ function App() {
       try {
         const result = await axios(FETCH_FILMS_API);
         setData(result.data);
+        console.log(result.data.results);
         setIsLoading(false);
       } catch (error) {
         setIsError(true);
