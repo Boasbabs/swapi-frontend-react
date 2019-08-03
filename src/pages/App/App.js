@@ -16,7 +16,7 @@ import {
   SortableTable
 } from "components";
 
-import { sortDateOldToNew } from "utils";
+import { compareDates } from "utils";
 import { FETCH_FILMS_API } from "../../constants";
 import logo from "./assets/star_wars_logo.png";
 import "./assets/App.css";
@@ -56,7 +56,7 @@ function App() {
   }));
 
   // Movie names in the dropdown sorted by release date from earliest to newest
-  filmOptions.sort(sortDateOldToNew);
+  filmOptions.sort(compareDates);
 
   function buildCharacterList(data) {
     let list = [];

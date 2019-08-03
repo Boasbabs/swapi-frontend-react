@@ -1,4 +1,4 @@
-export { default as sortDateOldToNew } from "./sortDateOldToNew";
+export { default as compareDates } from "./compareDates";
 export {
   convertToNumber,
   convertCmToFeet,

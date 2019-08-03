@@ -15,10 +15,10 @@ export function convertToNumber(x) {
  * @param {number} x
  */
 export function convertCmToInches(x) {
-  if (isNaN(x)) {
+  if (isNaN(x) || x === "") {
     return "Not a Number!";
   }
-  return Number.parseFloat(x / 2.54).toFixed(2);
+  return Number(Number.parseFloat(x / 2.54).toFixed(2));
 }
 
 /**
@@ -26,7 +26,7 @@ export function convertCmToInches(x) {
  * @param {number} x
  */
 export function convertCmToFeet(x) {
-  if (isNaN(x)) {
+  if (isNaN(x) || x === "") {
     return "Not a Number!";
   }
   return Math.floor(x / 30.48);

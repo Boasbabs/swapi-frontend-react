@@ -73,6 +73,8 @@ function SortableTable({ tableData }) {
                 <Icon color="blue" name="mars" />
               ) : gender === "female" ? (
                 <Icon color="pink" name="venus" />
+              ) : gender === "hermaphrodite" ? (
+                <Icon color="orange" name="venus mars" />
               ) : (
                 gender
               )}
