@@ -61,16 +61,19 @@ function App() {
   function buildCharacterList(data) {
     let list = [];
     data.forEach(async url => {
-      const result = await axios(url);
-      list.push(result.data);
+      try {
+        const result = await axios(url);
+        list.push(result.data);
+      } catch (error) {
+        alert("data for movie can't be fetched");
+        return;
+      }
     });
     return list;
   }
   function handleChange(e, { value }) {
-    // Needs to get current selected using the value of the selected options
     const currentFilm = filmOptions.find(film => film.value === value);
 
-    // Needs to fetch API for each of characters
     const currentFilmCharactersUrl = currentFilm.characters;
 
     const charactersList = buildCharacterList(currentFilmCharactersUrl);
@@ -102,12 +105,14 @@ function App() {
           />
         )}
 
-        <MovieDropdown
-          loading={isLoading}
-          movieData={filmOptions}
-          handleChange={handleChange}
-          value={value}
-        />
+        {!isError && (
+          <MovieDropdown
+            loading={isLoading}
+            movieData={filmOptions}
+            handleChange={handleChange}
+            value={value}
+          />
+        )}
 
         {openingCrawl && <MarqueeMessage text={openingCrawl} />}
       </Segment>
@@ -115,18 +120,19 @@ function App() {
       <Grid centered container>
         <Grid.Row>
           <Grid.Column width={12}>
-            { value === null ? (
-              <Image src={logo} size="small" centered />
-            ) : filmCharacters.length === 0 ? (
-              <Loader
-                active
-                size="massive"
-                inline="centered"
-                content="Loading movie characters..."
-              />
-            ) : (
-              <SortableTable tableData={filmCharacters} />
-            )}
+            {!isError &&
+              (value === null ? (
+                <Image src={logo} size="small" centered />
+              ) : filmCharacters.length === 0 ? (
+                <Loader
+                  active
+                  size="massive"
+                  inline="centered"
+                  content="Loading movie characters..."
+                />
+              ) : (
+                <SortableTable tableData={filmCharacters} />
+              ))}
           </Grid.Column>
         </Grid.Row>
       </Grid>
