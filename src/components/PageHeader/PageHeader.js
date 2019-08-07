@@ -1,9 +1,8 @@
-import React, { Fragment } from "react";
+import React from "react";
 import PropTypes from 'prop-types';
 import { Header, Icon } from "semantic-ui-react";
 
 const PageHeader = ({title, icon, subtitle}) => (
-  <Fragment>
     <Header
       icon
       size="large"
@@ -16,7 +15,6 @@ const PageHeader = ({title, icon, subtitle}) => (
         {subtitle}
       </Header.Subheader>
     </Header>
-  </Fragment>
 );
 
 PageHeader.propTypes = {

@@ -25,7 +25,7 @@ function SortableTable({ tableData }) {
   };
 
   useEffect(() => {
-    async function handleTotalHeight() {
+    function handleTotalHeight() {
       const hInCm = map(data, ({ height }) => convertToNumber(height)).reduce(
         (sum, cur) => {
           return sum + cur;
@@ -37,10 +37,10 @@ function SortableTable({ tableData }) {
       setHeightInInches(convertCmToInches(hInCm));
     }
     handleTotalHeight();
-  }, []);
+  }, [data]);
 
   return (
-    <Table sortable celled fixed compact unstackable color="yellow">
+    <Table sortable celled fixed compact unstackable color="yellow" inverted>
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell
