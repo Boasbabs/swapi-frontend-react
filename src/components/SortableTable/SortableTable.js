@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { sortBy } from "lodash";
+import sortBy from "lodash.sortby";
 import { Table, Icon } from "semantic-ui-react";
 import { convertCmToFeet, convertToNumber, convertCmToInches } from "utils";
 
