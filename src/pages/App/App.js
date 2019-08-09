@@ -69,6 +69,18 @@ function App() {
         return;
       }
     });
+    Promise.all(
+      data.map(async url => {
+        try {
+          const result = await axios(url);
+          console.log("DATA PROMISE", result.data)
+          list.push(result.data);
+        } catch (error) {
+          alert("data for movie can't be fetched");
+          return;
+        }
+      })
+    );
     return list;
   }
   function handleChange(e, { value }) {
