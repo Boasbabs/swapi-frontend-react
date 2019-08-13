@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { sortBy, map } from "lodash";
+import sortBy from "lodash.sortby";
 import { Table, Icon } from "semantic-ui-react";
 import { convertCmToFeet, convertToNumber, convertCmToInches } from "utils";
 
@@ -26,7 +26,7 @@ function SortableTable({ tableData }) {
 
   useEffect(() => {
     function handleTotalHeight() {
-      const hInCm = map(data, ({ height }) => convertToNumber(height)).reduce(
+      const hInCm = data.map(({ height }) => convertToNumber(height)).reduce(
         (sum, cur) => {
           return sum + cur;
         }
@@ -65,7 +65,7 @@ function SortableTable({ tableData }) {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {map(data, ({ height, gender, name }) => (
+        {data.map(({ height, gender, name }) => (
           <Table.Row key={name}>
             <Table.Cell>{name}</Table.Cell>
             <Table.Cell>
